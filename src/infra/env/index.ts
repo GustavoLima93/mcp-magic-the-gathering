@@ -29,6 +29,8 @@ const envSchema = z
 				(path) => path.startsWith('/'),
 				"MCP_SSE_PATH must start with '/'",
 			),
+		SCRYFALL_API_BASE_URL: z.url().trim().default('https://api.scryfall.com'),
+		SCRYFALL_HTTP_TIMEOUT_MS: z.coerce.number().int().min(1).default(10000),
 	})
 	.refine((env) => env.MCP_MESSAGES_PATH !== env.MCP_SSE_PATH, {
 		path: ['MCP_SSE_PATH'],

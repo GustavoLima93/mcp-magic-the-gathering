@@ -6,7 +6,8 @@
   "scripts": {
     "start:dev": "tsx watch src/startup.ts | pino-pretty --singleLine",
     "start": "node build/startup.cjs",
-    "build": "tsup src --out-dir build"
+    "build": "tsup src --out-dir build",
+    "test": "node --import tsx --test test/*.test.ts"
   },
   "keywords": [],
   "author": "",

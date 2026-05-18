@@ -1,9 +1,13 @@
 import Fastify from 'fastify';
+
 import { createHealthCheckController } from '@/application/controller/health-check-controller';
+import { createSearchCardsController } from '@/application/controller/search-cards-controller';
+
+import { env } from '@/infra/env';
+import { handleMcpRequest } from '@/infra/http/middleware/mcp-request';
+import { searchCardsInputSchema } from '@/infra/http/request/search-card-input';
+import { server } from '@/infra/http/server';
 import { logger } from '@/infra/log';
-import { env } from '../env';
-import { handleMcpRequest } from './middleware/mcp-request';
-import { server } from './server';
 
 server.setTool(
 	'health_check',
@@ -12,6 +16,13 @@ server.setTool(
 		serverName: env.MCP_SERVER_NAME,
 		version: env.MCP_SERVER_VERSION,
 	}),
+);
+
+server.setTool(
+	'search_cards',
+	'Searches Magic: The Gathering cards with Scryfall fulltext syntax. Defaults to compact JSON List results in structuredContent; set format=csv to return Scryfall CSV as text content.',
+	searchCardsInputSchema,
+	createSearchCardsController(),
 );
 
 export const app = Fastify({ loggerInstance: logger });
